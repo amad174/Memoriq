@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Memoriq",
+    "slug": "memoriq",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "memoriq",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0A0A0F"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.memoriq.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Memoriq needs microphone access to record voice notes."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#0A0A0F"
+      },
+      "permissions": ["RECORD_AUDIO"],
+      "package": "com.memoriq.app"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-av",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0A0A0F",
+          "image": "./assets/images/splash.png"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

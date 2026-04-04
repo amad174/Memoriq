@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: memoriq_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: memoriq
+      POSTGRES_PASSWORD: memoriq_secret
+      POSTGRES_DB: memoriq
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U memoriq -d memoriq"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: memoriq_backend
+    restart: unless-stopped
+    env_file:
+      - ../backend/.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://memoriq:memoriq_secret@db:5432/memoriq
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend/uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
