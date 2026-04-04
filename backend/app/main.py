@@ -21,10 +21,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers are registered in feature branches as they're added
 from app.routers.auth import router as auth_router  # noqa: E402
+from app.routers.notes import router as notes_router  # noqa: E402
 
 app.include_router(auth_router)
+app.include_router(notes_router)
 
 
 @app.get("/health")
