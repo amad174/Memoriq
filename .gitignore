@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+*.log
+
+# Backend secrets
+backend/.env
+backend/uploads/
+
+# Node / Expo
+node_modules/
+.expo/
+web-build/
+*.tsbuildinfo
+mobile/.env
+
+# macOS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
