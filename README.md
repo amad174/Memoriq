@@ -54,7 +54,7 @@ cd Memoriq
 
 ```bash
 cd infra
-docker-compose up -d db
+docker compose up -d db
 ```
 
 ### 3. Backend setup
