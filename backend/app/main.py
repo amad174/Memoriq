@@ -2,7 +2,9 @@ import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.config import settings
+from app.routers import auth, notes, calendar, summaries, search, ask
 
 
 @asynccontextmanager
@@ -15,17 +17,22 @@ app = FastAPI(title="Memoriq API", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Tighten in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-from app.routers.auth import router as auth_router  # noqa: E402
-from app.routers.notes import router as notes_router  # noqa: E402
+app.include_router(auth.router)
+app.include_router(notes.router)
+app.include_router(calendar.router)
+app.include_router(summaries.router)
+app.include_router(search.router)
+app.include_router(ask.router)
 
-app.include_router(auth_router)
-app.include_router(notes_router)
+# Serve uploaded audio files statically
+if os.path.isdir(settings.UPLOAD_DIR):
+    app.mount("/audio", StaticFiles(directory=settings.UPLOAD_DIR), name="audio")
 
 
 @app.get("/health")
