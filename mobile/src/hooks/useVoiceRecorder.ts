@@ -1,6 +1,34 @@
 import { useState, useRef, useCallback } from "react";
 import { Audio } from "expo-av";
 
+// Whisper-compatible recording preset: AAC in .m4a container
+const WHISPER_RECORDING_OPTIONS: Audio.RecordingOptions = {
+  isMeteringEnabled: false,
+  ios: {
+    extension: ".m4a",
+    outputFormat: Audio.IOSOutputFormat.MPEG4AAC,
+    audioQuality: Audio.IOSAudioQuality.HIGH,
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    bitRate: 128000,
+    linearPCMBitDepth: 16,
+    linearPCMIsBigEndian: false,
+    linearPCMIsFloat: false,
+  },
+  android: {
+    extension: ".m4a",
+    outputFormat: Audio.AndroidOutputFormat.MPEG_4,
+    audioEncoder: Audio.AndroidAudioEncoder.AAC,
+    sampleRate: 44100,
+    numberOfChannels: 1,
+    bitRate: 128000,
+  },
+  web: {
+    mimeType: "audio/webm",
+    bitsPerSecond: 128000,
+  },
+};
+
 export type RecordingState = "idle" | "recording" | "stopped";
 
 export interface UseVoiceRecorderResult {
@@ -32,7 +60,7 @@ export function useVoiceRecorder(): UseVoiceRecorderResult {
       }
       await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true });
       const recording = new Audio.Recording();
-      await recording.prepareToRecordAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY);
+      await recording.prepareToRecordAsync(WHISPER_RECORDING_OPTIONS);
       await recording.startAsync();
       recordingRef.current = recording;
       startTimeRef.current = Date.now();
